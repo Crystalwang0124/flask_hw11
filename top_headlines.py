@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for
 import requests
 from secrets import *
 import json
+from datetime import datetime
 
 ##### get the top 5 stories and save as a list #######
 CACHE_NYCT = 'cache_nyct.json'
@@ -57,8 +58,22 @@ def home_page():
 
 @app.route('/user/<user>')
 def user_name(user):
+    t = datetime.now().time()
+    t = str(t).split(':')[0]
+    morning = ['00','01','02','03','04','05','06','07','08','09','10','11','12']
+    afternoon = ['13','14','15','16']
+    evening = ['17','18','19','20']
+    night = ['21','22','23','24']
+    if t in morning:
+        greet = "morning"
+    elif t in afternoon:
+        greet = "afternoon"
+    elif t in evening:
+        greet = "evening"
+    elif t in night:
+        greet = "night"
 
-    return render_template('user.html', title="Hello," + user + "!", name=user, my_list=get_list('technology'))
+    return render_template('user.html', greeting=greet ,name=user, my_list=get_list('technology'))
 
 @app.route('/user/<user>/home')
 def section(user):
